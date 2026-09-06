@@ -104,18 +104,21 @@ packs, and none among the pack's own POIs. Net **1,424 → 1,419** distinct.
 
 Astoria has **no** empty flat ground big enough for a 113×109 build — RWG levelled every large
 plateau and then built a town on it. So `dtm.raw` was edited to level a pad under each own
-build, with a 16 m smoothstep ramp blending back into natural terrain.
+build, with a smoothstep ramp blending back into natural terrain — 16 m for the four small pads,
+28 m for the compound, whose west side drops into a gully.
 
 | Pad | Size | Height | Mean cut/fill |
 |---|--:|--:|--:|
 | StarterBase_Prison_Cellblock | 113×109 | 58 m | 1.12 m |
 | StarterBase_UFO_Farm | 69×75 | 56 m | 0.66 m |
-| Walled compound | 140×193 | 56 m | 2.04 m |
+| Walled compound | 146×202 | 56 m | 2.05 m |
 | StarterBase_Hotel_Tower | 127×124 | 56 m | 2.20 m |
 | StarterBase_Ranger_Station | 70×79 | 58 m | 1.08 m |
 
-- 93,799 cells changed — **0.14%** of the map surface
-- No existing POI footprint was touched (asserted, not assumed)
+- 104,410 cells changed — **0.16%** of the map surface
+- No existing POI footprint was touched. The ramp is frozen wherever it would reach one, so the
+  ground under `cabin_16` (6 m off the compound's east wall) and `xcpv_Trailer_01_ZZTong` (7 m off
+  the north wall) never moved.
 - `dtm.raw.ORIGINAL-BACKUP` holds the original
 
 ## The starter bases
@@ -144,9 +147,40 @@ plots and planted corn, under 132 blocks of 5 m dome that is not in the original
 bases from day one. Each carries a `YOffset` matched to its own build, so ground floors sit at
 ground level and bunkers stay underground.
 
-The compound is a 140×193 m wall built from `StarterBase_Bunker_House`'s own wall — same blocks,
-same corner and gate details — as four strip prefabs around the three houses. Each house keeps
-its original walls inside it.
+## The compound
+
+The three houses share a walled yard, **146 × 202 m** at X 2012…2157, Z −586…−385. Each house also
+keeps its own original walls inside it, so it is a wall within a wall.
+
+**Why that size.** East and north are boxed in — `cabin_16` sits 6 m off the east side, a trailer
+7 m off the north — so the only room is west and south. South is free; west runs into a gully, so
+width is what costs earthwork:
+
+| box | X clearance | Z clearance | west embankment over 8 m |
+|---|--:|--:|--:|
+| 140×193 (first attempt) | 2.3 m | 3.0 m | 29 m, max 14.1 m |
+| **146×202 (built)** | **4.3 m** | **6.0 m** | **31 m, max 14.2 m** |
+| 152×202 | 6.3 m | 6.0 m | 59 m, max 17.5 m |
+| 158×202 | 8.3 m | 6.0 m | 69 m, max 18.4 m |
+
+Going wider doubles the earthwork for 2 m of yard, so 146 is where it stops. There is no better
+site either: searching the whole region for a clear box this size returned exactly two, and the
+other is a lake bed at 3 m elevation. Minimum clearance to a wall is now **5 m**, up from 2 m.
+
+**The wall** is four strip prefabs, 2 m thick, three buried courses of footing (`YOffset -3`). The
+outer course stands six solid `concreteShapes:cube` high (~6 m) under a `polePlateHalf` cap; the
+inner course is four high, so its top is a **walkway 4 m up** with the outer course rising 2 m
+above it as a parapet, loopholed with `corrugatedMetalShapes:barsCentered` every 6 m. That is
+7,363 structural blocks against ~2,570 before, and roughly 8× the concrete volume, since it is
+full cubes rather than half blocks.
+
+Each wall has a **stair dip** — the walkway steps down 7-6-5-4 and back up — so you can walk the
+whole rampart in either direction and step off the low point into the yard.
+
+**Five gates**, each 5 m wide with a `rollUpGate5x3White` and the walkway bridging over it: two
+east (the road and city side), one north, one south, one west. Gate rotation follows the axis —
+5-wide along Z needs rotation 1 or 3, along X 0 or 2 — measured across every roll-up gate in the
+game's own prefabs rather than guessed.
 
 ## Spawn
 
