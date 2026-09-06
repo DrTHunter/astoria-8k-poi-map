@@ -11,66 +11,131 @@ Filter by layer or by POI pack, or search by name.
 
 ## What's in the world
 
-`prefabs.xml` went from **13,011 → 13,064** decorations. That is only +53 net, because most
-additions *replaced* something rather than piling on top of it.
+`prefabs.xml` holds **13,062** decorations, against **13,011** in the stock map. Only +51 net,
+because almost every addition *replaced* something rather than piling on top of it.
 
 | Layer | Count | What it is |
 |---|--:|---|
-| **My builds** | 13 | Own prefabs from `LocalPrefabs`, on levelled terrain pads |
+| **My builds** | 7 | Own prefabs from `LocalPrefabs`, on levelled terrain pads |
+| **Compopack fill** | 1,812 | Junk ruins and 7th+ duplicates swapped for Compopack POIs |
 | **Local fill** | 124 | Extra pack copies packed into the home cities |
 | **Town lots** | 73 | First pass, dropped into cleared city lots |
 | **Wilderness** | 49 | Rural, water and oversized POIs out in the open |
-| | **259** | total markers on the map |
+| | **2,065** | total markers on the map |
 
-197 of those took over a Tier‑0 filler lot — `remnant_*`, `rubble_*`, `lot_vacant_*` and friends,
-the non-enterable rubble that RWG scatters through every town. Astoria had **1,070** of them.
-Replacing filler instead of adding POIs means the town keeps its shape and its lot count, but
-the dead lots become buildings you can actually loot and quest.
+Markers are colour-coded by pack. The Compopack fill draws as small dots so the map stays
+readable at full zoom; everything else keeps its numbered ring. Toggle any layer off with the
+**Layer** chips.
 
-POIs come from eight packs: MPLogue, Voltralux, Zeebark, WinterDawn, Svarii, Caleseche,
-ShadowModernHouse and Cog's POIs.
+## The Compopack pass
+
+Astoria shipped with **1,070** Tier‑0 filler lots — `remnant_*`, `rubble_*`, `lot_vacant_*` and
+friends, the non-enterable rubble RWG scatters through every town — plus a lot of repetition
+(one downtown filler appeared **18** times). 1,812 of those slots now hold a Compopack POI.
+
+| Reason | Count |
+|---|--:|
+| junk — Tier‑0 `remnant_*`, `rubble_*`, `lot_*`, `*_filler_*` | 1,416 |
+| redundant — copies **beyond 6** of a vanilla POI, keeping the 6 most spread out | 396 |
+
+- **820 distinct** Compopack POIs, drawn from a pool of **1,419 verified-unique** ones.
+- Max **4 copies** of any one POI across the whole 8 km map.
+- Closest same-POI pair **584 m**, median 4,221 m; never twice in one town unless that town had
+  no alternative.
+- **1,769 of 1,812** have sleeper volumes, so they are lootable and questable. The rubble had none.
+- Difficulty spread is now T0 494 · T1 644 · T2 379 · T3 164 · T4 66 · T5 65.
+
+`downtown_filler_park_*` and `downtown_filler_plaza_*` were **kept** — that is intended open
+space in a downtown block, not junk. The 8×8 and 10×10 wilderness fillers were kept too; the
+Compopack has nothing that size.
+
+POIs come from nine packs: Compopack Classic AIO, MPLogue, Voltralux, Zeebark, WinterDawn,
+Svarii, Caleseche, ShadowModernHouse and Cog's POIs.
 
 ## How the placement was done
 
-Nothing was hand-placed. Sites were solved against the world's own data files.
+Nothing was hand-placed. Sites were solved against the world's own data files, and both
+placement rules were re-derived from this map before anything was written.
 
-**Town lots.** Every RWG street tile declares its POI slots in `POIMarkerStart` /
-`POIMarkerSize` / `POIMarkerPartRotations`. Those markers were resolved to world space through
-each tile's own rotation, which gives the real lot rectangles — so a swapped-in POI lands
-exactly where the tile intended a building, with the road, driveway and streetlights already
-built and the ground already flat.
+**Slots.** Every replacement reuses the lot it took over — same X/Y/Z, and an **exact footprint
+match**, so no POI can overhang its lot and the town keeps its shape and lot count. Overlapping
+POI pairs: 94 before, 94 after. All 94 are pre-existing in the stock Astoria map.
+
+**Height.** Terrain is `dtm.raw[Z+4096, X+4096] / 256`, and a decoration's `Y` is
+`round(terrain at POI centre) + 1`. `YOffset` is applied by the game at load, not baked into
+`prefabs.xml` — verified against 1,055 wilderness POIs, 100% within 1.5 m. That is what keeps a
+POI's ground floor level with the ground and its basement underground.
 
 **Rotation.** A POI's facing is not its raw `rotation` value; it depends on how the prefab was
-authored. The law used here was derived from 8,758 matched placements across Navezgane, the
-four shipped Pregen worlds and Astoria itself:
+authored. Swapping A for B in a fixed slot is:
 
 ```
-rotation = (marker_rotation + tile_rotation + RotationToFaceNorth) mod 4
+rotation_new = (rotation_old − RotationToFaceNorth_old + RotationToFaceNorth_new) mod 4
 ```
 
-**Wilderness.** `dtm.raw` (8192², 16-bit) for terrain, `splat3.png` for roads, and a footprint
-mask built from all 13,011 existing decorations using each prefab's real `PrefabSize`. Sites had
-to be flat, clear with 8 m of margin, above the water plane and near a road. Every placement was
-then re-checked at full 1 m resolution — **zero overlaps**.
+`(rotation − RotationToFaceNorth)` was constant across **401 of 401** repeated tile slots on this
+map, so every replacement faces the street exactly the way its predecessor did.
 
-**Repetition control.** In the local fill, no POI appears twice in the same town, copies are at
-least 300 m apart, and nothing is used more than twice in the area.
+**Fit.** Candidates were restricted to the slot's township context — downtown POIs into downtown
+blocks, industrial into industrial, wilderness into open country — read from the RWG street tile
+the lot sits in.
+
+## Compopack compatibility (V 3.2.0)
+
+The pack is built for an older game version, so it was audited before use. Nothing needed patching:
+
+- All **2,099** prefabs parse (`.tts` versions 16–19; the game reads all of them).
+- **Zero unknown block names** — every block it references exists in vanilla V 3.2.0. No
+  dependency on any other mod.
+- `biomes.xml`, `rwgmixer.xml` and `spawning.xml` are well-formed `<conditional>`-gated modlet
+  patches whose xpath targets still exist. They only affect generating *new* worlds; Astoria is
+  pre-generated.
+- 12 name collisions with vanilla, all intentional overrides: 5 `part_terrain_greeble_*`
+  (byte-identical) and 5 `rwg_tile_oldwest_*` (taller CP versions). Astoria places **zero**
+  oldwest tiles, so that override changes nothing here.
+
+**Duplicate check.** Only **5** Compopack POIs are byte-identical copies of vanilla ones —
+`xcpv_LittleAsia_Park_01_TFP` (= `park_01`) and `xcpv_LittleAsia_filler_02/03/04/05_TFP`
+(= `wilderness_filler_09/13/14/18`). All five excluded. No near-duplicates beyond those (same
+dimensions *and* same block array under a different name), none against the other installed
+packs, and none among the pack's own POIs. Net **1,424 → 1,419** distinct.
 
 ## Terrain edits
 
-Astoria has **no** empty flat ground big enough for a 103×103 build — RWG levelled every large
-plateau and then built a town on it. So `dtm.raw` was edited to level a pad under each of the 13
-own builds, with a 24 m cosine ramp blending back into natural terrain.
+Astoria has **no** empty flat ground big enough for a 113×109 build — RWG levelled every large
+plateau and then built a town on it. So `dtm.raw` was edited to level a pad under each own
+build, with a 16 m smoothstep ramp blending back into natural terrain.
 
-- 0.27% of the map surface modified, cut/fill ≤ 10 m per build
+| Pad | Size | Height | Mean cut/fill |
+|---|--:|--:|--:|
+| PrisonRightOne | 113×109 | 58 m | 1.12 m |
+| Best-UFO-Base | 69×75 | 56 m | 0.66 m |
+| Walled compound | 140×193 | 56 m | 2.04 m |
+| IdealMajorTowerHB | 127×124 | 56 m | 2.20 m |
+| RangerStationHBbest | 70×79 | 58 m | 1.08 m |
+
+- 93,799 cells changed — **0.14%** of the map surface
 - No existing POI footprint was touched (asserted, not assumed)
-- Land steeper than 45° in the modified area went **down**, 15,872 m² → 7,401 m²
 - `dtm.raw.ORIGINAL-BACKUP` holds the original
+
+## The starter bases
+
+Seven builds from `LocalPrefabs`, in priority order of real estate: `PrisonRightOne`,
+`Best-UFO-Base`, `RangerStationHBbest`, then the three houses in a walled compound
+(`SuperHouse2BH`, `SuperDuperHousebunkerHB`, `ayosairHouseUPdated`), and `IdealMajorTowerHB`.
+
+**None of them have sleeper volumes**, so they spawn no zombies and can be used as starter
+bases from day one. Each carries a `YOffset` matched to its own build, so ground floors sit at
+ground level and bunkers stay underground.
+
+The compound is a 140×193 m wall built from `SuperDuperHousebunkerHB`'s own wall — same blocks,
+same corner and gate details — as four strip prefabs around the three houses. Each house keeps
+its original walls inside it.
 
 ## Spawn
 
-`spawnpoints.xml` now has a single point at **2415, −817**, the centre of `Prison-perimiter`.
-The original ten are kept in `spawnpoints.xml.ORIGINAL-BACKUP`.
+`spawnpoints.xml` has a single point at **2430, −800**, in the prison yard of `PrisonRightOne`,
+close to the big city. The original ten are kept in `spawnpoints.xml.ORIGINAL-BACKUP`.
 
 A Land Claim Block **cannot** be baked into the world — it needs an owner, and an unowned one
 claims nothing. Place one yourself on arrival:
@@ -80,9 +145,7 @@ giveself keystoneBlock
 ```
 
 Per the game's own description: *"LCBs will also prevent Sleeper and Biome respawns, but allow
-Blood Moon or Screamer spawns."* So it stops POI sleepers and wandering zombies inside the
-claim, but not blood moons or screamers. Clear the prison once; the LCB keeps them from
-coming back.
+Blood Moon or Screamer spawns."*
 
 ## Applying it to a save
 
@@ -95,9 +158,7 @@ chunkreset <x1> <z1> <x2> <z2>
 
 The player-relative form (`chunkreset` with no arguments) explicitly *does not reload POI data*,
 so the coordinate form is required. It also destroys anything built in that box and resets loot
-containers there.
-
-On a fresh save none of this is needed — everything is present from the start.
+containers there. Given the scale of this pass, **a new save is the cleaner option**.
 
 ## Layout of the world folder
 
@@ -105,32 +166,34 @@ Generated alongside `%APPDATA%/7DaysToDie/GeneratedWorlds/Astoria 8K/`:
 
 | File | Contents |
 |---|---|
+| `REPOPULATED.md` | the Compopack pass, compatibility audit and save notes |
+| `REPOPULATED_pois.csv` | all 1,812 swaps — X, Z, reason, context, removed, added, tier |
+| `MY_PREFABS.md` | the starter bases, spawn and claim-block notes |
 | `ADDED_POIS.md` | the first 122, with coordinates |
 | `ADDED_POIS_local.md` | the 124 local copies, by town, with reset commands |
-| `MY_PREFABS.md` | the 13 own builds, spawn and claim-block notes |
-| `TELEPORTS*.txt` | teleport commands for everything |
+| `TELEPORTS*.txt` | teleport commands |
 
-Backups kept in place: `prefabs.xml.ORIGINAL-BACKUP`, `.BEFORE-ORPHAN-FIX`,
-`.BEFORE-DENSIFY`, `.BEFORE-MYPREFABS`, plus `dtm.raw.ORIGINAL-BACKUP` and
+Backups kept in place: `prefabs.xml.ORIGINAL-BACKUP`, `.BEFORE-ORPHAN-FIX`, `.BEFORE-DENSIFY`,
+`.BEFORE-MYPREFABS`, `.BEFORE-REBUILD`, `.BEFORE-REPOP`, plus `dtm.raw.ORIGINAL-BACKUP` and
 `spawnpoints.xml.ORIGINAL-BACKUP`.
 
 ## Known gaps
 
-- **La Saignerie medieval pack (34 POIs) is not loaded.** It ships without a `ModInfo.xml` and
-  its prefabs are not under a `Prefabs/` folder, so the game never sees it. It needs
-  repackaging before those POIs can be placed.
 - **Own builds load from `LocalPrefabs`.** That is one of the game's prefab search paths, so it
   resolves in single player, but a dedicated server would need them moved into a mod folder.
-- **Traders were deliberately skipped** — the packs ship eight, and extra traders risk
-  conflicting with Astoria's existing trader and quest routing.
-- Six wilderness POIs sit on 6–8.7 m of ground relief. Nothing flatter exists at their size.
+- **Traders were deliberately skipped.** The Compopack's traders ship as a separate mod, and
+  extra traders risk conflicting with Astoria's existing trader and quest routing.
+- 50 junk POIs remain: the 8×8 and 10×10 wilderness fillers, which have no Compopack POI of
+  matching size.
+- `Mods\AAL-__vortex_tmp_00000001` was a leftover Vortex temp deployment, byte-identical to
+  `AAJ-Classic All In One` including a second copy of `StallionsdensDoorTriggerVolumes.dll`.
+  Two copies of the same Harmony assembly patch the game twice; it was moved to
+  `Mods_disabled_by_claude\`.
 
 ## The map page
 
 The base map is switchable: seven full-world renders live in `maps/`, and the **Map** chips
 above Layer and Pack swap between them. Each is north up over the same 8192 m square as the
-pins, so nothing needs registering, and only the one on screen is ever fetched — the page
-loads about 1.2 MB rather than the 1.5 MB that the old embedded JPEG cost every visitor.
+pins, so nothing needs registering, and only the one on screen is ever fetched.
 
-`index.html` is otherwise unchanged and still has no build step; serve the folder, or open
-the file directly.
+`index.html` has no build step; serve the folder, or open the file directly.
