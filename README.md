@@ -115,7 +115,8 @@ build, with a smoothstep ramp blending back into natural terrain — 16 m for th
 | StarterBase_Hotel_Tower | 127×124 | 56 m | 2.20 m |
 | StarterBase_Ranger_Station | 70×79 | 58 m | 1.08 m |
 
-- 104,410 cells changed — **0.16%** of the map surface
+- 107,853 cells changed — **0.16%** of the map surface, including the graded bed for the two
+  outside road legs
 - No existing POI footprint was touched. The ramp is frozen wherever it would reach one, so the
   ground under `cabin_16` (6 m off the compound's east wall) and `xcpv_Trailer_01_ZZTong` (7 m off
   the north wall) never moved.
@@ -159,28 +160,47 @@ width is what costs earthwork:
 | box | X clearance | Z clearance | west embankment over 8 m |
 |---|--:|--:|--:|
 | 140×193 (first attempt) | 2.3 m | 3.0 m | 29 m, max 14.1 m |
-| **146×202 (built)** | **4.3 m** | **6.0 m** | **31 m, max 14.2 m** |
+| **146×202 (built)** | **6 m** | **7 m** | **31 m, max 14.2 m** |
 | 152×202 | 6.3 m | 6.0 m | 59 m, max 17.5 m |
 | 158×202 | 8.3 m | 6.0 m | 69 m, max 18.4 m |
 
 Going wider doubles the earthwork for 2 m of yard, so 146 is where it stops. There is no better
 site either: searching the whole region for a clear box this size returned exactly two, and the
-other is a lake bed at 3 m elevation. Minimum clearance to a wall is now **5 m**, up from 2 m.
+other is a lake bed at 3 m elevation. Minimum clearance to a wall is **6 m**, up from 2 m (the
+figures above assumed a 2 m wall; the estate wall is 1 m, which hands another metre back).
 
-**The wall** is four strip prefabs, 2 m thick, three buried courses of footing (`YOffset -3`). The
-outer course stands six solid `concreteShapes:cube` high (~6 m) under a `polePlateHalf` cap; the
-inner course is four high, so its top is a **walkway 4 m up** with the outer course rising 2 m
-above it as a parapet, loopholed with `corrugatedMetalShapes:barsCentered` every 6 m. That is
-7,363 structural blocks against ~2,570 before, and roughly 8× the concrete volume, since it is
-full cubes rather than half blocks.
+**The wall** copies the front wall of `StarterBase_Modern_House` block for block: brick pillars
+every 6 m (five courses, with a `cubeBaseboard4Sided` collar and a `concreteShapes:pillar100Cap`),
+and between them a four-course panel — brick base, a dark `corrugatedMetalShapes:windowCentered`
+metal panel, then two courses of `ironBarsCentered`. 1 m thick, 5 m tall at the pillars.
 
-Each wall has a **stair dip** — the walkway steps down 7-6-5-4 and back up — so you can walk the
-whole rampart in either direction and step off the low point into the yard.
+The "centered" plane blocks are direction-sensitive: measured across the donor, a run along Z takes
+rotation 1 or 3 and a run along X takes 0 or 2, so the north and south strips carry different
+rotations from the east and west ones.
 
-**Five gates**, each 5 m wide with a `rollUpGate5x3White` and the walkway bridging over it: two
-east (the road and city side), one north, one south, one west. Gate rotation follows the axis —
-5-wide along Z needs rotation 1 or 3, along X 0 or 2 — measured across every roll-up gate in the
-game's own prefabs rather than guessed.
+**Five working gates**, each a `steelGarageDoor5x3Black` — a real 5×3 multiblock that opens —
+centred in a 5 m opening with a pillar either side and the railing carried across the top: two east,
+one each north, south and west. Gate rotation follows the same axis law, measured across every
+`steelGarageDoor5x3Black` and `rollUpGate5x3White` in the game's own prefabs.
+
+This is a decorative estate wall, not a fortification: it replaced a 2 m concrete rampart that stood
+6 m high with a walkway. It matches the house, which is the point, but it will not hold a horde.
+Losing that metre of thickness did give the yard back — minimum clearance to a wall is now **6 m**.
+
+## Roads
+
+Eight thin asphalt prefabs — one course of `terrAsphalt` with clear air above — laid the same way the
+Modern House lays its own driveway.
+
+Inside, a **ring road** runs right around the inside of the wall, so all five gates open straight
+onto it and it passes the front of every house, plus a **cross lane** through the 6 m gap between
+the Modern House and the two northern houses, and a footpath between those two.
+
+The way out was chosen by searching every L-shaped route from each gate to a pixel of the existing
+road network in `splat3.png`, scored on how far the ground would have to move. The obvious route —
+straight south from the east gate — crosses a gully and needed **17.8 m of fill**. The one built
+runs east from the east gate then turns south at X 2259, needs **4.9 m at worst and 1.45 m on
+average**, and joins the existing road at about (2262, −545).
 
 ## Spawn
 
