@@ -108,11 +108,11 @@ build, with a 16 m smoothstep ramp blending back into natural terrain.
 
 | Pad | Size | Height | Mean cut/fill |
 |---|--:|--:|--:|
-| PrisonRightOne | 113×109 | 58 m | 1.12 m |
-| Best-UFO-Base | 69×75 | 56 m | 0.66 m |
+| StarterBase_Prison_Cellblock | 113×109 | 58 m | 1.12 m |
+| StarterBase_UFO_Farm | 69×75 | 56 m | 0.66 m |
 | Walled compound | 140×193 | 56 m | 2.04 m |
-| IdealMajorTowerHB | 127×124 | 56 m | 2.20 m |
-| RangerStationHBbest | 70×79 | 58 m | 1.08 m |
+| StarterBase_Hotel_Tower | 127×124 | 56 m | 2.20 m |
+| StarterBase_Ranger_Station | 70×79 | 58 m | 1.08 m |
 
 - 93,799 cells changed — **0.14%** of the map surface
 - No existing POI footprint was touched (asserted, not assumed)
@@ -120,21 +120,37 @@ build, with a 16 m smoothstep ramp blending back into natural terrain.
 
 ## The starter bases
 
-Seven builds from `LocalPrefabs`, in priority order of real estate: `PrisonRightOne`,
-`Best-UFO-Base`, `RangerStationHBbest`, then the three houses in a walled compound
-(`SuperHouse2BH`, `SuperDuperHousebunkerHB`, `ayosairHouseUPdated`), and `IdealMajorTowerHB`.
+Seven builds from `LocalPrefabs`. The game ships no localization for POI names, so the prefab
+filename *is* what shows on the compass, the map marker and in quest text. Each one is named for
+the POI it was cut from, with a `StarterBase_` prefix so it reads as what it is.
+
+Source POIs were identified by TF-IDF cosine similarity over each build's block-name set against
+all 4,128 installed prefabs — what the blocks say, not a guess from the old filename.
+
+| Cut from | Match | Name | Size |
+|---|--:|---|--:|
+| `prison_01` | 0.85 | **StarterBase_Prison_Cellblock** — holds the map spawn | 113×109 |
+| `farm_17` | 0.70 | **StarterBase_UFO_Farm** | 69×75 |
+| `ranger_station_07` | 0.89 | **StarterBase_Ranger_Station** | 70×79 |
+| `hotel_03` | 0.90 | **StarterBase_Hotel_Tower** | 127×124 |
+| `house_modern_18` | 0.94 | **StarterBase_Modern_House** — in the compound | 111×105 |
+| `house_modern_31` | 0.93 | **StarterBase_Bunker_House** — in the compound | 69×75 |
+| `Ayesoar_Mansion_by_MPLogue` | 0.83 | **StarterBase_Ayesoar_Mansion** — in the compound | 60×54 |
+
+The UFO farm scores lowest because it is the most modified: it keeps `farm_17`'s 72 player farm
+plots and planted corn, under 132 blocks of 5 m dome that is not in the original farm at all.
 
 **None of them have sleeper volumes**, so they spawn no zombies and can be used as starter
 bases from day one. Each carries a `YOffset` matched to its own build, so ground floors sit at
 ground level and bunkers stay underground.
 
-The compound is a 140×193 m wall built from `SuperDuperHousebunkerHB`'s own wall — same blocks,
+The compound is a 140×193 m wall built from `StarterBase_Bunker_House`'s own wall — same blocks,
 same corner and gate details — as four strip prefabs around the three houses. Each house keeps
 its original walls inside it.
 
 ## Spawn
 
-`spawnpoints.xml` has a single point at **2430, −800**, in the prison yard of `PrisonRightOne`,
+`spawnpoints.xml` has a single point at **2430, −800**, in the prison yard of `StarterBase_Prison_Cellblock`,
 close to the big city. The original ten are kept in `spawnpoints.xml.ORIGINAL-BACKUP`.
 
 A Land Claim Block **cannot** be baked into the world — it needs an owner, and an unowned one
