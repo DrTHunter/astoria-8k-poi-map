@@ -127,6 +127,10 @@ Backups kept in place: `prefabs.xml.ORIGINAL-BACKUP`, `.BEFORE-ORPHAN-FIX`,
 
 ## The map page
 
-`index.html` is self-contained — the basemap is an embedded JPEG rendered from `dtm.raw`,
-`biomes.png` and `splat3.png`, so there are no external requests and no build step. Open the
-file directly or serve it anywhere.
+The base map is switchable: seven full-world renders live in `maps/`, and the **Map** chips
+above Layer and Pack swap between them. Each is north up over the same 8192 m square as the
+pins, so nothing needs registering, and only the one on screen is ever fetched — the page
+loads about 1.2 MB rather than the 1.5 MB that the old embedded JPEG cost every visitor.
+
+`index.html` is otherwise unchanged and still has no build step; serve the folder, or open
+the file directly.
