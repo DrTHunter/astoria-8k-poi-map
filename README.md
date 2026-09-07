@@ -11,17 +11,17 @@ Filter by layer or by POI pack, or search by name.
 
 ## What's in the world
 
-`prefabs.xml` holds **13,062** decorations, against **13,011** in the stock map. Only +51 net,
+`prefabs.xml` holds **13,081** decorations, against **13,011** in the stock map. Only +51 net,
 because almost every addition *replaced* something rather than piling on top of it.
 
 | Layer | Count | What it is |
 |---|--:|---|
-| **My builds** | 7 | Own prefabs from `LocalPrefabs`, on levelled terrain pads |
+| **Starter bases** | 8 | Own prefabs on levelled pads, in two walled plots |
 | **Compopack fill** | 1,812 | Junk ruins and 7th+ duplicates swapped for Compopack POIs |
 | **Local fill** | 124 | Extra pack copies packed into the home cities |
 | **Town lots** | 73 | First pass, dropped into cleared city lots |
 | **Wilderness** | 49 | Rural, water and oversized POIs out in the open |
-| | **2,065** | total markers on the map |
+| | **2,066** | total markers on the map |
 
 Markers are colour-coded by pack. The Compopack fill draws as small dots so the map stays
 readable at full zoom; everything else keeps its numbered ring. Toggle any layer off with the
@@ -140,6 +140,7 @@ all 4,128 installed prefabs — what the blocks say, not a guess from the old fi
 | `house_modern_18` | 0.94 | **StarterBase_Modern_House** — in the compound | 111×105 |
 | `house_modern_31` | 0.93 | **StarterBase_Bunker_House** — in the compound | 69×75 |
 | `Ayesoar_Mansion_by_MPLogue` | 0.83 | **StarterBase_Ayesoar_Mansion** — in the compound | 60×54 |
+| `Modern_House_Zeebark` (Zeebark pack) | — | **StarterBase_Zeebark_Modern_House** — own plot, 14 m east | 60×60 |
 
 The UFO farm scores lowest because it is the most modified: it keeps `farm_17`'s 72 player farm
 plots and planted corn, under 132 blocks of 5 m dome that is not in the original farm at all.
@@ -201,6 +202,23 @@ road network in `splat3.png`, scored on how far the ground would have to move. T
 straight south from the east gate — crosses a gully and needed **17.8 m of fill**. The one built
 runs east from the east gate then turns south at X 2259, needs **4.9 m at worst and 1.45 m on
 average**, and joins the existing road at about (2262, −545).
+
+## Plot 2
+
+`Modern_House_Zeebark` was added as an eighth starter base, but at 60×60 nothing that size was left
+inside the compound — the three houses already fill 82 % of the interior once the ring road is in.
+Extending the compound to fit it needs to reach Z −653, which is **blocked by an existing POI**, and
+even Z −640 puts **157 m of wall on >8 m of fill** against 31 m today. One box can't hold both
+plots either: `cabin_16` sits between them.
+
+So it has its own walled plot, **74×74 at X 2172…2245, Z −524…−451**, 14 m east — better ground than
+the compound itself (mean cut/fill **1.0 m**, and no part of its wall on more than 8 m of fill). Same
+estate wall, gates south onto the road out and west facing the compound; the compound's east wall
+gained a third gate opposite it and a paved 14 m link, so you can drive between the two.
+
+**Its 31 `GroupZomBadassOnly` sleeper volumes were stripped**, along with its trigger volumes and
+Tier‑5 rating, to match the other starter bases. The `.tts` is byte-identical to Zeebark's original —
+only the `.xml` metadata changed, and the pack's own copy is untouched.
 
 ## Spawn
 
