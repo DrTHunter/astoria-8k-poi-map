@@ -17,14 +17,14 @@ Filter by layer or by POI pack, search by name, and switch between seven full-wo
 
 ## What's plotted
 
-**2,104 markers**, everything in the world that isn't stock Astoria, plus every trader. The world
-holds **13,103** decorations against 13,011 in the stock map — only +92 net, because almost every
+**2,106 markers**, everything in the world that isn't stock Astoria, plus every trader. The world
+holds **13,105** decorations against 13,011 in the stock map — only +94 net, because almost every
 addition *replaced* something rather than piling on top of it.
 
 | Layer | Count | What it is |
 |---|--:|---|
 | **Traders** | 38 | One within a short walk of every town — 14 added, 3 given a better building |
-| **Starter bases** | 8 | My own builds on levelled pads, in two walled plots. No sleeper volumes |
+| **Starter bases** | 10 | My eight builds on levelled pads in two walled plots, plus two horde bunkers. No sleeper volumes |
 | **Compopack fill** | 1,812 | Tier‑0 ruins and 7th+ duplicates swapped for Compopack POIs |
 | **Local fill** | 124 | Extra pack copies packed into the home cities |
 | **Town lots** | 73 | First pass, dropped into cleared city lots |
