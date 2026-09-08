@@ -18,20 +18,20 @@ Filter by layer or by POI pack, search by name, and switch between seven full-wo
 ## What's plotted
 
 **2,106 markers**, everything in the world that isn't stock Astoria, plus every trader. The world
-holds **13,105** decorations against 13,011 in the stock map — only +94 net, because almost every
+holds **13,108** decorations against 13,011 in the stock map — only +97 net, because almost every
 addition *replaced* something rather than piling on top of it.
 
 | Layer | Count | What it is |
 |---|--:|---|
 | **Traders** | 38 | One within a short walk of every town — 14 added, 3 given a better building |
-| **Starter bases** | 10 | My eight builds plus two horde bunkers. Three houses sit inside a stone rampart — walkway, stairs, six gates, corner towers. No sleeper volumes |
+| **Starter bases** | 10 | My eight builds plus two horde bunkers. Three houses sit in a compound fenced the way the Modern House is — its gatehouses and entrance buildings included. No sleeper volumes |
 | **Compopack fill** | 1,812 | Tier‑0 ruins and 7th+ duplicates swapped for Compopack POIs |
 | **Local fill** | 124 | Extra pack copies packed into the home cities |
 | **Town lots** | 73 | First pass, dropped into cleared city lots |
 | **Wilderness** | 49 | Rural, water and oversized POIs out in the open |
 
 Markers are coloured by pack. The Compopack fill draws as small dots so the map stays readable at
-full zoom; everything else keeps its numbered ring. The dashed rectangle is the ramparted compound,
+full zoom; everything else keeps its numbered ring. The dashed rectangle is the fenced compound,
 and the ringed dot is the map spawn at `2430, -800`.
 
 The full write-up of how all of it was placed — the rules, how they were derived from the map's own
