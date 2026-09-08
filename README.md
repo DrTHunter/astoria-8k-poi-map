@@ -18,7 +18,7 @@ Filter by layer or by POI pack, search by name, and switch between seven full-wo
 ## What's plotted
 
 **2,104 markers**, everything in the world that isn't stock Astoria, plus every trader. The world
-holds **13,095** decorations against 13,011 in the stock map — only +84 net, because almost every
+holds **13,103** decorations against 13,011 in the stock map — only +92 net, because almost every
 addition *replaced* something rather than piling on top of it.
 
 | Layer | Count | What it is |
