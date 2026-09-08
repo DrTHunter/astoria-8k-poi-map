@@ -24,14 +24,14 @@ addition *replaced* something rather than piling on top of it.
 | Layer | Count | What it is |
 |---|--:|---|
 | **Traders** | 38 | One within a short walk of every town — 14 added, 3 given a better building |
-| **Starter bases** | 10 | My eight builds on levelled pads in two walled plots, plus two horde bunkers. No sleeper volumes |
+| **Starter bases** | 10 | My eight builds plus two horde bunkers. Three houses sit inside a stone rampart — walkway, stairs, six gates, corner towers. No sleeper volumes |
 | **Compopack fill** | 1,812 | Tier‑0 ruins and 7th+ duplicates swapped for Compopack POIs |
 | **Local fill** | 124 | Extra pack copies packed into the home cities |
 | **Town lots** | 73 | First pass, dropped into cleared city lots |
 | **Wilderness** | 49 | Rural, water and oversized POIs out in the open |
 
 Markers are coloured by pack. The Compopack fill draws as small dots so the map stays readable at
-full zoom; everything else keeps its numbered ring. The dashed rectangle is the walled compound,
+full zoom; everything else keeps its numbered ring. The dashed rectangle is the ramparted compound,
 and the ringed dot is the map spawn at `2430, -800`.
 
 The full write-up of how all of it was placed — the rules, how they were derived from the map's own
